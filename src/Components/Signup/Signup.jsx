@@ -1,5 +1,6 @@
 "use client";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 
 const Signup = () => {
@@ -7,6 +8,7 @@ const Signup = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const router = useRouter();
 
   const reset = () => {
     setName("");
@@ -41,6 +43,7 @@ const Signup = () => {
       });
       if (res.ok) {
         reset();
+        router.push("/login");
       }
     } catch (error) {
       console.error("Error accessing headers:", error);

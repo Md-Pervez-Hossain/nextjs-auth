@@ -1,15 +1,38 @@
 "use client";
 
+import { signIn } from "next-auth/react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const handleSubmit = (e) => {
+  const [error, setError] = useState("");
+  const router = useRouter();
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(email, password);
+    try {
+      const res = await signIn("credentials", {
+        email,
+        password,
+        redirect: false,
+      });
+      console.log("Sign In Response:", res);
+
+      if (res.error) {
+        setError("Invalid credentials");
+        return;
+      }
+
+      // If sign-in is successful, navigate to the profile page
+      router.replace("/profile");
+    } catch (error) {
+      console.error("Sign In Error:", error);
+      setError("An error occurred while signing in");
+    }
   };
+
   return (
     <div className="w-1/2 mx-auto">
       <h2 className="mb-5">Login</h2>
@@ -31,8 +54,9 @@ const Login = () => {
           className="border-2 mb-5 border-gray-200 px-4 py-2 rounded-lg w-full"
         />
         <button className="w-full bg-blue-500 px-4 py-2 text-white rounded-lg">
-          Signup
+          Signin
         </button>
+        {error && <div className="text-red-500">{error}</div>}
         <div className=" py-8 text-center font-bold">
           <Link href="/signup">Go To Signup</Link>
         </div>
