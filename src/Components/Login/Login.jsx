@@ -53,14 +53,27 @@ const Login = () => {
           placeholder="Enter your Password"
           className="border-2 mb-5 border-gray-200 px-4 py-2 rounded-lg w-full"
         />
-        <button className="w-full bg-blue-500 px-4 py-2 text-white rounded-lg">
+        <button className="w-full mb-5 bg-blue-500 px-4 py-2 text-white rounded-lg">
           Signin
         </button>
+
         {error && <div className="text-red-500">{error}</div>}
         <div className=" py-8 text-center font-bold">
           <Link href="/signup">Go To Signup</Link>
         </div>
       </form>
+      <button
+        onClick={() => signIn("google")}
+        className="w-full mb-5 bg-blue-500 px-4 py-2 text-white rounded-lg"
+      >
+        Signin With Google
+      </button>
+      <button
+        onClick={() => signIn("github")}
+        className="w-full mb-5 bg-blue-500 px-4 py-2 text-white rounded-lg"
+      >
+        Signin With Github
+      </button>
     </div>
   );
 };

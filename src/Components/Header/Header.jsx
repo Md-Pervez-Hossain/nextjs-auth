@@ -1,11 +1,12 @@
 "use client";
 import { signOut, useSession } from "next-auth/react";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React from "react";
 
 const Header = () => {
-  const { data: session } = useSession();
+  const { status, data: session } = useSession();
   console.log(session); // Get the user's session
   // const router = useRouter();
 
@@ -19,11 +20,18 @@ const Header = () => {
         <Link href="/">Logo</Link>
       </div>
       <div className="flex items-center gap-5">
-        {session?.user ? (
+        {status === "authenticated" ? (
           <>
             {" "}
             <Link href="/dashboard">Dashboard</Link>
             <Link href="/profile">Profile</Link>
+            <Image
+              src={session?.user?.image}
+              alt=""
+              width={50}
+              height={50}
+              className="rounded-full"
+            />
             <button
               onClick={handleSignOut}
               className="bg-blue-600 px-6 py-3 text-white"
