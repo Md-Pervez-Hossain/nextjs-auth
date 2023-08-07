@@ -7,6 +7,7 @@ import GoogleProvider from "next-auth/providers/google";
 import GitHubProvider from "next-auth/providers/github";
 import { signIn } from "next-auth/react";
 import GUser from "../../../../../models/googleUserSchema/googleUserSchema";
+import GitUser from "../../../../../models/githubUserSchema/githubUserSchema";
 export const authOptions = {
   providers: [
     CredentialsProvider({
@@ -65,6 +66,28 @@ export const authOptions = {
           const userExits = await GUser.findOne({ email });
           if (!userExits) {
             const res = await fetch("http://localhost:3000/api/googleUser", {
+              method: "POST",
+              headers: {
+                "content-type": "application/json",
+              },
+              body: JSON.stringify({ name, email }),
+            });
+            if (res.ok) {
+              return user;
+            }
+          }
+          return user;
+        } catch (error) {
+          console.log(error);
+        }
+      }
+      if (account.provider === "github") {
+        const { name, email } = user;
+        try {
+          await connectMongoDB();
+          const exitsUser = await GitUser.findOne({ email });
+          if (!exitsUser) {
+            const res = await fetch("http://localhost:3000/api/githubUser", {
               method: "POST",
               headers: {
                 "content-type": "application/json",
